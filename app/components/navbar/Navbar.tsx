@@ -12,7 +12,7 @@ export default function Navbar({}: Props) {
   return (
     <nav
       className={`${
-        dark ? "dark bg-slate-700" : "bg-slate-200"
+        dark ? "dark bg-darkBackground" : "bg-lightBackground"
       } h-[5rem] w-full flex items-center justify-center relative`}
     >
       <h2
@@ -21,7 +21,7 @@ export default function Navbar({}: Props) {
       >
         <span className="italic font-extrabold">K</span>eeper
       </h2>
-      <div className="absolute right-10">
+      <div className="absolute right-10 ">
         <MenuButton />
       </div>
 

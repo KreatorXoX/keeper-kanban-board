@@ -4,7 +4,7 @@ import Container from "./components/Container";
 export default function Home() {
   return (
     <Container>
-      <h2>Hello from kanban</h2>
+      <h2>Welcome to the Keeper</h2>
     </Container>
   );
 }
