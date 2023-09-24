@@ -40,6 +40,7 @@ export default function RootLayout({
       <body className={nunito.className}>
         <Navbar />
         {children}
+        <div id="dragPortal"></div>
       </body>
     </html>
   );
