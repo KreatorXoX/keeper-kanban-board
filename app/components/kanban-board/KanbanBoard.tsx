@@ -31,9 +31,7 @@ export default function KanbanBoard({}: Props) {
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 20,
-      },
+      activationConstraint: { delay: 10, tolerance: 0 },
     })
   );
 
@@ -48,6 +46,19 @@ export default function KanbanBoard({}: Props) {
     const updatedColumns = columns.filter((col) => col.id !== id);
     setColumns(updatedColumns);
   };
+
+  const updateColumnHandler = (id: string, title: string) => {
+    const updatedColumns = columns.map((col) => {
+      if (col.id !== id) {
+        return col;
+      } else {
+        return { ...col, title };
+      }
+    });
+
+    setColumns(updatedColumns);
+  };
+
   const columnIds = useMemo(() => {
     return columns.map((col) => col.id);
   }, [columns]);
@@ -83,7 +94,7 @@ export default function KanbanBoard({}: Props) {
         sensors={sensors}
       >
         <div className="mx-auto flex flex-col md:h-[75vh] md:flex-row justify-start items-center md:items-baseline  md:justify-between gap-5 md:gap-10 w-full">
-          <div className=" overflow-x-auto flex w-full md:flex-row flex-col items-center gap-5">
+          <div className=" overflow-x-auto flex w-full md:flex-row flex-col items-center gap-5 no-scrollbar">
             <SortableContext items={columnIds}>
               {columns.map((col, idx) => (
                 <ColumnContainer
@@ -91,6 +102,7 @@ export default function KanbanBoard({}: Props) {
                   isActive={columns.length === 1 || activeColumn?.id === col.id}
                   column={col}
                   deleteColumnHandler={deleteColumnHandler}
+                  updateColumnHandler={updateColumnHandler}
                   isDark={dark}
                 />
               ))}
@@ -119,6 +131,7 @@ export default function KanbanBoard({}: Props) {
                   <ColumnContainer
                     column={activeColumn}
                     deleteColumnHandler={deleteColumnHandler}
+                    updateColumnHandler={updateColumnHandler}
                     isDark={dark}
                   />
                 )}

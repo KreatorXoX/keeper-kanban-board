@@ -1,12 +1,15 @@
 import { Column } from "@/types";
-import React from "react";
-import { PiTrash } from "react-icons/pi";
+import React, { useEffect, useMemo, useState } from "react";
+import { PiPen, PiTrash } from "react-icons/pi";
 import { useSortable } from "@dnd-kit/sortable";
+
 import { CSS } from "@dnd-kit/utilities";
+
 type Props = {
   column: Column;
   isActive?: boolean;
   deleteColumnHandler: (id: string) => void;
+  updateColumnHandler: (id: string, title: string) => void;
   isDark?: boolean;
 };
 
@@ -14,8 +17,11 @@ export default function ColumnContainer({
   column,
   isActive,
   deleteColumnHandler,
+  updateColumnHandler,
   isDark,
 }: Props) {
+  const [isEditMode, setEditMode] = useState<boolean>(false);
+
   const {
     setNodeRef,
     attributes,
@@ -30,6 +36,7 @@ export default function ColumnContainer({
       type: "Column",
       column,
     },
+    disabled: isEditMode,
   });
 
   const style = {
@@ -43,112 +50,144 @@ export default function ColumnContainer({
         ref={setNodeRef}
         style={style}
         className={`
-         
-         ${
-           isDark
-             ? "bg-darkColumn text-darkText"
-             : "bg-lightColumn text-lightText"
-         }
-      min-w-full md:min-w-[350px] md:max-w-[350px] md:h-[75vh] md:max-h-[75vh] max-h-[54px] overflow-hidden
- 
-      rounded-xl cursor-pointer select-none opacity-40 border-2 border-rose-500
-      
-      `}
+           ${
+             isDark
+               ? "bg-darkColumnBg text-darkText"
+               : "bg-lightColumnBg text-lightText"
+           }
+           ${isActive ? "h-[3.4rem] md:h-[70vh]" : "h-[3.4rem]  md:h-[70vh]"}
+           border
+        border-rose-500
+  opacity-40
+        rounded-xl select-none  min-w-[400px] max-w-[400px] overflow-x-hidden overflow-y-auto no-scrollbar
+
+        `}
       >
         {/* Title */}
         <div
           {...attributes}
           {...listeners}
-          className={`font-semibold 
-           ${
-             isDark
-               ? "bg-darkBackground text-darkText border-darkColumn"
-               : "bg-lightBackground text-lightText border-lightColumn"
-           }
-         rounded-lg
-      p-2 cursor-grab rounded-b-none flex justify-between items-center group
-      w-full  border-4 
+          className={`font-semibold
+             ${
+               isDark
+                 ? "bg-darkBackgroundBg text-darkText border-darkColumnBg"
+                 : "bg-lightBackgroundBg text-lightText border-lightColumnBg"
+             }
+           rounded-lg
+        p-2 cursor-grab rounded-b-none flex justify-between items-center group
+        w-full  border-4
+        `}
+        ></div>
+
+        {/* Task Content */}
+        <div></div>
+
+        {/* Footer */}
+      </div>
+    );
+  }
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={{
+        ...style,
+      }}
+      className={`
+         ${
+           isDark
+             ? "bg-darkColumnBg text-darkText"
+             : "bg-lightColumnBg text-lightText"
+         }
+         ${isActive ? "h-[50vh] md:h-[70vh]" : "h-[3.4rem] md:h-[70vh]"}
+         
+      
+
+      rounded-xl select-none  min-w-[400px] max-w-[400px] overflow-x-hidden overflow-y-auto no-scrollbar
+    
+
+      `}
+    >
+      {/* Title */}
+      <div
+        className={`group flex justify-between items-center
+               ${
+                 isDark
+                   ? "bg-darkTitleBg text-darkText border-darkColumnBg"
+                   : "bg-lightTitleBg text-lightText border-lightColumnBg"
+               }
+           rounded-lg
+        p-2  rounded-b-none
+        w-full  border-4
+
+          `}
+      >
+        <div
+          {...attributes}
+          {...listeners}
+          className={`font-semibold w-full cursor-grab
+      
       `}
         >
           <h2
             className="truncate 
       "
           >
-            {column.title}
+            {isEditMode && (
+              <input
+                className=" bg-lightColumnBg border border-rose-500 outline-none rounded dark:bg-darkColumnBg"
+                type="text"
+                autoFocus
+                value={column.title}
+                onChange={(e) => updateColumnHandler(column.id, e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key !== "Enter") return;
+                  setEditMode(false);
+                }}
+                onBlur={() => setEditMode(false)}
+              />
+            )}
+            {!isEditMode && column.title}
             {/* <span className="absolute -top-14 group-hover:top-0 left-0 p-3 z-50 bg-red-500 transition-all text-sm duration-500 w-full">
           {column.title}
         </span> */}
           </h2>
-          <button onClick={deleteColumnHandler.bind(null, column.id)}>
-            <PiTrash
-              size={30}
-              className="text-gray-500 hover:text-lightText dark:hover:text-lightColumn cursor-pointer dark:hover:bg-darkColumn hover:bg-lightColumn
-          rounded-full p-1 transition invisible group-hover:visible
-          "
-            />
-          </button>
         </div>
-
-        {/* Task Content */}
-        <div>Content</div>
-        {/* Footer */}
-      </div>
-    );
-  }
-  return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      className={`${
-        isActive ? "min-h-[600px]" : "max-h-[54px] md:max-h-fit overflow-hidden"
-      } 
-         ${
-           isDark
-             ? "bg-darkColumn text-darkText"
-             : "bg-lightColumn text-lightText"
-         }
-      min-w-full md:min-w-[350px] md:max-w-[350px] md:h-[75vh] max-h-[75vh]
- 
-      rounded-xl cursor-pointer select-none
-      `}
-    >
-      {/* Title */}
-      <div
-        {...attributes}
-        {...listeners}
-        className={`font-semibold 
-           ${
-             isDark
-               ? "bg-darkBackground text-darkText border-darkColumn"
-               : "bg-lightBackground text-lightText border-lightColumn"
-           }
-         rounded-lg
-      p-2 cursor-grab rounded-b-none flex justify-between items-center group
-      w-full  border-4 
-      `}
-      >
-        <h2
-          className="truncate 
-      "
-        >
-          {column.title}
-          {/* <span className="absolute -top-14 group-hover:top-0 left-0 p-3 z-50 bg-red-500 transition-all text-sm duration-500 w-full">
-          {column.title}
-        </span> */}
-        </h2>
+        <button onClick={() => setEditMode((prev) => !prev)}>
+          <PiPen
+            size={30}
+            className="text-gray-500 hover:text-lightText dark:hover:text-darkText cursor-pointer dark:hover:bg-darkColumnBg hover:bg-lightColumnBg
+          rounded-full p-1 transition invisible group-hover:visible 
+          "
+          />
+        </button>
         <button onClick={deleteColumnHandler.bind(null, column.id)}>
           <PiTrash
             size={30}
-            className="text-gray-500 hover:text-lightText dark:hover:text-lightColumn cursor-pointer dark:hover:bg-darkColumn hover:bg-lightColumn
-          rounded-full p-1 transition invisible group-hover:visible
+            className="text-gray-500 hover:text-lightText dark:hover:text-darkText cursor-pointer dark:hover:bg-darkColumnBg hover:bg-lightColumnBg
+          rounded-full p-1 transition invisible group-hover:visible 
           "
           />
         </button>
       </div>
-
-      {/* Task Content */}
-      <div>Content</div>
-      {/* Footer */}
+      <div
+        className={`flex flex-col justify-between  h-[calc(100%-10vh)]
+      
+      `}
+      >
+        {/* Task Content */}
+        <div className="p-2">
+          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quam quidem
+          ipsam id mollitia et dicta delectus consectetur minus, sint corporis
+          vero? Est saepe dolore adipisci eos atque enim nihil quidem. Officiis
+          corrupti laborum iusto dolorem tempora enim ab nisi dicta ducimus
+          rerum, eveniet fuga ea labore soluta totam perferendis? Cupiditate at
+          officia eaque doloribus, dolorem vel accusamus. Vero, consequatur
+          dolorum?
+        </div>
+        {/* Footer */}
+        <button className="">Add Task</button>
+      </div>
     </div>
   );
 }
