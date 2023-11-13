@@ -176,15 +176,15 @@ export default function ColumnContainer({
       `}
       >
         {/* Task Content */}
-        <div className="p-2">
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quam quidem
+   <div className='p-2'>{column?.tasks ? column.tasks : 
+        `          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quam quidem
           ipsam id mollitia et dicta delectus consectetur minus, sint corporis
           vero? Est saepe dolore adipisci eos atque enim nihil quidem. Officiis
           corrupti laborum iusto dolorem tempora enim ab nisi dicta ducimus
           rerum, eveniet fuga ea labore soluta totam perferendis? Cupiditate at
           officia eaque doloribus, dolorem vel accusamus. Vero, consequatur
-          dolorum?
-        </div>
+          dolorum?`
+          }</div>
         {/* Footer */}
         <button className="">Add Task</button>
       </div>
