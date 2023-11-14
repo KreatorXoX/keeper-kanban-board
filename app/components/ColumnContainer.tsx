@@ -59,7 +59,7 @@ export default function ColumnContainer({
            border
         border-rose-500
   opacity-40
-        rounded-xl select-none  min-w-[400px] max-w-[400px] overflow-x-hidden overflow-y-auto no-scrollbar
+        rounded-xl select-none  min-w-[300px] max-w-[400px] overflow-x-hidden overflow-y-auto no-scrollbar
 
         `}
       >
@@ -103,7 +103,7 @@ export default function ColumnContainer({
          
       
 
-      rounded-xl select-none  min-w-[400px] max-w-[400px] overflow-x-hidden overflow-y-auto no-scrollbar
+      rounded-xl select-none  min-w-[300px] max-w-[400px] overflow-x-hidden overflow-y-auto no-scrollbar
     
 
       `}
@@ -176,17 +176,31 @@ export default function ColumnContainer({
       `}
       >
         {/* Task Content */}
-   <div className='p-2'>{column?.tasks ? column.tasks : 
-        `          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quam quidem
+        <div className="p-2">
+          {/* {column?.tasks
+            ? column.tasks.map((task) => <p key={task.id}>{task.content}</p>)
+            : `          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quam quidem
           ipsam id mollitia et dicta delectus consectetur minus, sint corporis
           vero? Est saepe dolore adipisci eos atque enim nihil quidem. Officiis
           corrupti laborum iusto dolorem tempora enim ab nisi dicta ducimus
           rerum, eveniet fuga ea labore soluta totam perferendis? Cupiditate at
           officia eaque doloribus, dolorem vel accusamus. Vero, consequatur
-          dolorum?`
-          }</div>
+          dolorum?`} */}
+          {/* normally this will be  */}
+          <ul>
+            {column.tasks?.map((task) => (
+              <li key={task.id}>{task.content}</li>
+            ))}
+          </ul>
+        </div>
         {/* Footer */}
-        <button className="">Add Task</button>
+        <button
+          className={`${isDark ? "bg-darkTitleBg" : "bg-lightTitleBg"}
+        p-1  hover:opacity-80 transition w-1/2 mx-auto rounded-lg font-semibold  outline-none border-none hover:scale-95
+        `}
+        >
+          Add Task
+        </button>
       </div>
     </div>
   );
